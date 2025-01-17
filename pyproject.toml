@@ -2,10 +2,18 @@
 name = "daedalus"
 version = "0.1.0"
 description = "A structured, architecturally elegant Python web framework "
-authors = []
+authors = [
+    {name = "ER28",email = "l.guerra-rago@pm.me"}
+]
 readme = "README.md"
 requires-python = ">=3.13"
-dependencies = ["falcon (>=4.0.2,<5.0.0)", "pydantic (>=2.10.5,<3.0.0)", "uvicorn (>=0.34.0,<0.35.0)"]
+dependencies = [
+    "falcon (>=4.0.2,<5.0.0)",
+    "flask (>=3.1.0,<4.0.0)",
+    "waitress (>=3.0.2,<4.0.0)",
+    "uvicorn (>=0.34.0,<0.35.0)",
+    "fastapi (>=0.115.6,<0.116.0)"
+]
 
 
 [build-system]
