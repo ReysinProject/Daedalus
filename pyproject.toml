@@ -1,0 +1,13 @@
+[project]
+name = "daedalus"
+version = "0.1.0"
+description = "A structured, architecturally elegant Python web framework "
+authors = []
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = ["falcon (>=4.0.2,<5.0.0)", "pydantic (>=2.10.5,<3.0.0)", "uvicorn (>=0.34.0,<0.35.0)"]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
