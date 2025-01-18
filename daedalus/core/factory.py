@@ -1,5 +1,6 @@
 import inspect
 import os
+from typing import Literal
 
 from daedalus.api.factory import ApiFactory
 from daedalus.bootstrap.bootstrap_manager import BootstrapManager
@@ -9,7 +10,7 @@ from daedalus.logger.logger import Logger
 
 class DaedalusFactory:
 
-    def __init__(self, module):
+    def __init__(self, module, framework: Literal["falcon", "fastapi"]="fastapi"):
         """
         Initialize the Daedalus instance.
         Register and map modules.
@@ -28,7 +29,7 @@ class DaedalusFactory:
 
         Logger.info("Initializing API...")
         self._api = ApiFactory(
-            framework="fastapi"
+            framework=framework
         )
 
         Logger.info("Mapping modules...")
