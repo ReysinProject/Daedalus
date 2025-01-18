@@ -1,4 +1,4 @@
-from daedalus.ioc.module import Module
+from daedalus.bootstrap.decorator.module import Module
 
 
 @Module()

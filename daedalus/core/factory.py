@@ -2,6 +2,7 @@ import inspect
 import os
 
 from daedalus.bootstrap.bootstrap_manager import BootstrapManager
+from daedalus.bootstrap.module_node import ModuleNode
 from daedalus.logger.logger import Logger
 
 
@@ -23,12 +24,20 @@ class DaedalusFactory:
         Logger.info("Registering modules...")
         self._bootstrap_manager = BootstrapManager(base_path=os.path.dirname(inspect.getfile(self._module)))
         self._bootstrap_manager.register_all()
-        print(self._bootstrap_manager.get_registered_classes())
 
         Logger.info("Mapping modules...")
+        self._entrypoint = ModuleNode(
+            module=self._module,
+            bootstrapper=self._bootstrap_manager
+        )
+        self._entrypoint.print()
 
-    def serve(self):
+    def serve(self, port:int=8080, host:str='localhost', cors: bool =False):
         """
         Serve Daedalus.
+        :param cors:
+        :param port:
+        :param host:
         """
-        Logger.info("Serving Daedalus...")
+        is_secure = False
+        Logger.info("Serving Daedalus on {}://{}:{}".format("https" if is_secure else "http",host, port))

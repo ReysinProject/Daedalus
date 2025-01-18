@@ -1,5 +1,5 @@
 from daedalus.ioc.lazy_inject import LazyInject
-from daedalus.ioc.service import Service
+from daedalus.bootstrap.decorator.service import Service
 
 
 @Service()

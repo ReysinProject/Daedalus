@@ -1,4 +1,4 @@
-from daedalus.ioc.controller import Controller
+from daedalus.bootstrap.decorator.controller import Controller
 from daedalus.ioc.lazy_inject import LazyInject
 
 

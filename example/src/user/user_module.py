@@ -1,4 +1,4 @@
-from daedalus.ioc.module import Module
+from daedalus.bootstrap.decorator.module import Module
 from example.src.user.user_controller import UserController
 from example.src.user.user_service import UserService
 
@@ -6,5 +6,5 @@ from example.src.user.user_service import UserService
 @Module()
 class UserModule:
     imports = ['LoggerModule']
-    providers = [UserService]
-    controllers = [UserController]
+    providers = ['UserService']
+    controllers = ['UserController']

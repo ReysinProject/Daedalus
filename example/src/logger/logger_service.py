@@ -1,4 +1,4 @@
-from daedalus.ioc.service import Service
+from daedalus.bootstrap.decorator.service import Service
 
 
 @Service()
