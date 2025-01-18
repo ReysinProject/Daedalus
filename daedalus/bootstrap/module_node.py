@@ -28,7 +28,18 @@ class ModuleNode:
         for controller in self._controllers:
             print(controller.routes)
             for route in controller.routes:
-                self.api.route(path=route['path'], methods=route['methods'])(route['handler'])
+                # Create a closure to preserve the controller instance
+                def create_handler(controller_instance, route_handler):
+                    def handler(*args, **kwargs):
+                        return route_handler(controller_instance, *args, **kwargs)
+
+                    return handler
+
+                # Register the route with the wrapped handler
+                self.api.route(
+                    path=route['path'],
+                    methods=route['methods']
+                )(create_handler(controller, route['handler']))
 
     def _get_providers(self):
         """
@@ -82,7 +93,7 @@ class ModuleNode:
             setattr(injectable, 'api', self.api)
 
         if hasattr(injectable, 'inject'):
-            dependencies = [self._bootstrapper.get_class_by_name(dep if isinstance(dep, str) else dep.__name__) for dep in injectable.inject]
+            dependencies = [self._inject_and_init(self._bootstrapper.get_class_by_name(dep if isinstance(dep, str) else dep.__name__)) for dep in injectable.inject]
             instance =  injectable(*dependencies)
         else:
             instance = injectable()

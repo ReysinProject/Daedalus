@@ -25,9 +25,8 @@ class UserController:
 
     @endpoint(path="/user")
     def create_user_route(self, req):
-        print(self)
-        print(req)
-        # self.user_service.create_user("John Doe")
+        # self will now be properly available here
+        self.user_service.create_user("John Doe")
         return JanusResponse(
             status_code=200,
             data={"message": "User created"}
