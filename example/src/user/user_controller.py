@@ -1,7 +1,7 @@
 from typing import Any, Dict, List
 
 from daedalus.api.decorators.endpoint import endpoint
-from daedalus.api.interface.response import JanusResponse
+from daedalus.api.interface.response import Response
 from daedalus.bootstrap.decorator.controller import Controller
 from example.src.user.user_service import UserService
 
@@ -27,7 +27,7 @@ class UserController:
     def create_user_route(self, req):
         # self will now be properly available here
         self.user_service.create_user("John Doe")
-        return JanusResponse(
+        return Response(
             status_code=200,
             data={"message": "User created"}
         )

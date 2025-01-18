@@ -1,8 +1,8 @@
 from abc import ABC, abstractmethod
 from typing import Callable, Any
 
-from daedalus.api.interface.request import JanusRequest
-from daedalus.api.interface.response import JanusResponse
+from daedalus.api.interface.request import Request
+from daedalus.api.interface.response import Response
 
 
 class FrameworkAdapter(ABC):
@@ -15,9 +15,9 @@ class FrameworkAdapter(ABC):
         pass
 
     @abstractmethod
-    def convert_request(self, framework_request: Any) -> JanusRequest:
+    def convert_request(self, framework_request: Any) -> Request:
         pass
 
     @abstractmethod
-    def convert_response(self, janus_response: JanusResponse) -> Any:
+    def convert_response(self, janus_response: Response) -> Any:
         pass

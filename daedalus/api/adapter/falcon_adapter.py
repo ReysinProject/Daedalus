@@ -2,8 +2,8 @@ import json
 from typing import Callable, Any
 
 from daedalus.api.adapter.framework_adapter import FrameworkAdapter
-from daedalus.api.interface.request import JanusRequest
-from daedalus.api.interface.response import JanusResponse
+from daedalus.api.interface.request import Request
+from daedalus.api.interface.response import Response
 
 
 class FalconAdapter(FrameworkAdapter):
@@ -37,13 +37,13 @@ class FalconAdapter(FrameworkAdapter):
                     janus_response = handler(janus_request, **kwargs)
                     self.convert_response(janus_response, resp)
 
-                def convert_request(self, req) -> JanusRequest:
+                def convert_request(self, req) -> Request:
                     try:
                         body = json.load(req.stream)
                     except:
                         body = {}
 
-                    return JanusRequest(
+                    return Request(
                         method=req.method,
                         path=req.path,
                         headers=req.headers,
@@ -51,7 +51,7 @@ class FalconAdapter(FrameworkAdapter):
                         query_params=req.params
                     )
 
-                def convert_response(self, janus_response: JanusResponse, resp: Any) -> None:
+                def convert_response(self, janus_response: Response, resp: Any) -> None:
                     resp.text = json.dumps(janus_response.data)
                     resp.status = str(janus_response.status_code)
                     resp.content_type = 'application/json'
@@ -67,10 +67,10 @@ class FalconAdapter(FrameworkAdapter):
         import waitress
         waitress.serve(self.app, host=host, port=port)
 
-    def convert_request(self, framework_request: Any) -> JanusRequest:
+    def convert_request(self, framework_request: Any) -> Request:
         # This method is implemented in the Resource class
         pass
 
-    def convert_response(self, janus_response: JanusResponse) -> Any:
+    def convert_response(self, janus_response: Response) -> Any:
         # This method is implemented in the Resource class
         pass

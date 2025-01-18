@@ -1,8 +1,8 @@
 from typing import Any, Callable
 
 from daedalus.api.adapter.framework_adapter import FrameworkAdapter
-from daedalus.api.interface.request import JanusRequest
-from daedalus.api.interface.response import JanusResponse
+from daedalus.api.interface.request import Request
+from daedalus.api.interface.response import Response
 
 
 class FastAPIAdapter(FrameworkAdapter):
@@ -27,13 +27,13 @@ class FastAPIAdapter(FrameworkAdapter):
         import uvicorn
         uvicorn.run(self.app, host=host, port=port)
 
-    async def convert_request(self, framework_request: Any) -> JanusRequest:
+    async def convert_request(self, framework_request: Any) -> Request:
         try:
             body = await framework_request.json()
         except:
             body = {}
 
-        return JanusRequest(
+        return Request(
             method=framework_request.method,
             path=framework_request.url.path,
             headers=dict(framework_request.headers),
@@ -41,7 +41,7 @@ class FastAPIAdapter(FrameworkAdapter):
             query_params=dict(framework_request.query_params)
         )
 
-    def convert_response(self, janus_response: JanusResponse) -> Any:
+    def convert_response(self, janus_response: Response) -> Any:
         return self._response_class(
             content=janus_response.data,
             status_code=janus_response.status_code,
