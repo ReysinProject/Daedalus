@@ -1,3 +1,6 @@
+import inspect
+import os
+
 from daedalus.ioc.injectable import Injectable
 
 
@@ -6,6 +9,9 @@ class Module:
         injectable = Injectable()
         module_instance = cls()
         injectable.register_module(cls.__name__, module_instance)
+
+        setattr(cls, '__decorated__', True)
+        setattr(cls, '__module_type__', 'module')
 
         # Register providers and controllers from imported modules
         for import_module in module_instance.imports:
