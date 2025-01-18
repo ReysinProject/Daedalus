@@ -1,6 +1,7 @@
 import inspect
 import os
 
+from daedalus.api.factory import ApiFactory
 from daedalus.bootstrap.bootstrap_manager import BootstrapManager
 from daedalus.bootstrap.module_node import ModuleNode
 from daedalus.logger.logger import Logger
@@ -25,12 +26,17 @@ class DaedalusFactory:
         self._bootstrap_manager = BootstrapManager(base_path=os.path.dirname(inspect.getfile(self._module)))
         self._bootstrap_manager.register_all()
 
+        Logger.info("Initializing API...")
+        self._api = ApiFactory(
+            framework="fastapi"
+        )
+
         Logger.info("Mapping modules...")
         self._entrypoint = ModuleNode(
             module=self._module,
-            bootstrapper=self._bootstrap_manager
+            bootstrapper=self._bootstrap_manager,
+            api=self._api
         )
-        self._entrypoint.print()
 
     def serve(self, port:int=8080, host:str='localhost', cors: bool =False):
         """
@@ -41,3 +47,4 @@ class DaedalusFactory:
         """
         is_secure = False
         Logger.info("Serving Daedalus on {}://{}:{}".format("https" if is_secure else "http",host, port))
+        self._api.start(port=port, host=host)

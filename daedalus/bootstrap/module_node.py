@@ -1,25 +1,34 @@
+from daedalus.api.factory import ApiFactory
 from daedalus.bootstrap.bootstrap_manager import BootstrapManager
 
 
 class ModuleNode:
 
-    def __init__(self, module, bootstrapper: BootstrapManager):
+    def __init__(self, module, bootstrapper: BootstrapManager, api: ApiFactory):
         """
         Initialize the ModuleNode instance.
 
         Args:
             module: The module
             bootstrapper: The BootstrapManager instance
+            :param api:
         """
+        self.api = api
         self.name = module.__name__
         self._module = module()
         self._bootstrapper = bootstrapper
         self._imports = []
         self._providers = []
+        self._controllers = []
 
         self._get_providers()
         self._get_imports()
         self._get_controllers()
+
+        for controller in self._controllers:
+            print(controller.routes)
+            for route in controller.routes:
+                self.api.route(path=route['path'], methods=route['methods'])(route['handler'])
 
     def _get_providers(self):
         """
@@ -43,8 +52,8 @@ class ModuleNode:
         for controller in self._module.controllers:
             controller = self._bootstrapper.get_class_by_name(controller)
 
-            self._providers.append(
-                self._inject_and_init(injectable=controller)
+            self._controllers.append(
+                self._inject_and_init(injectable=controller, is_controller=True)
             )
 
     def _get_imports(self):
@@ -58,24 +67,27 @@ class ModuleNode:
 
         for import_module in imports:
             self._imports.append(
-                ModuleNode(
-                    module=self._bootstrapper.get_class_by_name(import_module),
-                    bootstrapper=self._bootstrapper
-                )
+                ModuleNode(module=self._bootstrapper.get_class_by_name(import_module), bootstrapper=self._bootstrapper, api=self.api)
             )
 
-    def _inject_and_init(self, injectable):
+    def _inject_and_init(self, injectable, is_controller=False):
         """
         Inject dependencies and initialize the object.
 
         Args:
             injectable: The object to inject dependencies into
         """
+
+        if is_controller:
+            setattr(injectable, 'api', self.api)
+
         if hasattr(injectable, 'inject'):
             dependencies = [self._bootstrapper.get_class_by_name(dep if isinstance(dep, str) else dep.__name__) for dep in injectable.inject]
-            return injectable(*dependencies)
+            instance =  injectable(*dependencies)
         else:
-            return injectable()
+            instance = injectable()
+
+        return instance
 
     def print(self, level=0):
         """
