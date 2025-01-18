@@ -19,6 +19,7 @@ class ModuleNode:
 
         self._get_providers()
         self._get_imports()
+        self._get_controllers()
 
     def _get_providers(self):
         """
@@ -29,7 +30,21 @@ class ModuleNode:
         """
         for provider in self._module.providers:
             self._providers.append(
-                self._bootstrapper.get_class_by_name(provider)
+                self._inject_and_init(injectable=self._bootstrapper.get_class_by_name(provider))
+            )
+
+    def _get_controllers(self):
+        """
+        Get controllers from the module.
+
+        Returns:
+            list: The controllers
+        """
+        for controller in self._module.controllers:
+            controller = self._bootstrapper.get_class_by_name(controller)
+
+            self._providers.append(
+                self._inject_and_init(injectable=controller)
             )
 
     def _get_imports(self):
@@ -48,6 +63,19 @@ class ModuleNode:
                     bootstrapper=self._bootstrapper
                 )
             )
+
+    def _inject_and_init(self, injectable):
+        """
+        Inject dependencies and initialize the object.
+
+        Args:
+            injectable: The object to inject dependencies into
+        """
+        if hasattr(injectable, 'inject'):
+            dependencies = [self._bootstrapper.get_class_by_name(dep if isinstance(dep, str) else dep.__name__) for dep in injectable.inject]
+            return injectable(*dependencies)
+        else:
+            return injectable()
 
     def print(self, level=0):
         """
