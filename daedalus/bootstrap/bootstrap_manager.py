@@ -6,7 +6,6 @@ from typing import List, Type, Any, Optional
 
 from daedalus.logger.logger import Logger
 
-
 class BootstrapManager:
     def __init__(self, base_path: str):
         """
@@ -31,7 +30,7 @@ class BootstrapManager:
         Returns:
             bool: True if the file matches any target pattern
         """
-        patterns = ['_module.py', '_service.py', '_controller.py']
+        patterns = ['.py']
         return any(filename.endswith(pattern) for pattern in patterns)
 
     def _get_module_name(self, file_path: str) -> str:
@@ -67,6 +66,12 @@ class BootstrapManager:
         # added by the decorators from daedalus.ioc
         if hasattr(cls, '__decorated__'):
             return True
+
+        # Check if the class is a wrapper and has the __decorated__ attribute
+        if hasattr(cls, '__wrapped__'):
+            wrapped_cls = getattr(cls, '__wrapped__')
+            if hasattr(wrapped_cls, '__decorated__'):
+                return True
 
         return False
 
@@ -119,7 +124,7 @@ class BootstrapManager:
 
                 # Check if module contains exactly one decorated class
                 if len(decorated_classes) == 0:
-                    Logger.error(f"Error: Module {module_path} contains no decorated classes (@Module() or @Service())")
+                    Logger.error(f"Error: Module {module_path} contains no valid decorated classes (@Module(), Controller() or @Service())")
                     continue
                 elif len(decorated_classes) > 1:
                     Logger.error(f"Error: Module {module_path} contains multiple decorated classes. Each module should contain exactly one decorated class.")

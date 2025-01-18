@@ -1,7 +1,7 @@
 from daedalus.core.factory import DaedalusFactory
 from example.src.main_module import MainModule
 
-app = DaedalusFactory.create(MainModule)
+app = DaedalusFactory(MainModule)
 
 app.serve()
 

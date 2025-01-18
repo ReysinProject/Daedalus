@@ -1,5 +1,5 @@
 from daedalus.ioc.module import Module
-from example.logger.logger_service import LoggerService
+from example.src.logger.logger_service import LoggerService
 
 
 @Module()
