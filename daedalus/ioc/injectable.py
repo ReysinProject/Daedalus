@@ -9,7 +9,6 @@ class Injectable:
         return cls._instance
 
     def register_provider(self, token, cls):
-        print(token)
         self._providers[token] = cls
 
     def register_module(self, token, module):
@@ -18,8 +17,6 @@ class Injectable:
     def resolve_provider(self, token):
         cls = self._providers.get(token)
         if cls is None:
-            for key in self._providers.keys():
-                print(key)
             raise ValueError(f"No provider found for token: {token}")
         return cls()
 
