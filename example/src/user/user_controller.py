@@ -1,5 +1,3 @@
-from typing import Any, Dict, List
-
 from daedalus.api.decorators.endpoint import endpoint
 from daedalus.api.interface.response import Response
 from daedalus.bootstrap.decorator.controller import Controller
@@ -14,7 +12,7 @@ class UserController:
         self.user_service = user_service
 
     @endpoint(path="/user")
-    def create_user_route(self, req):
+    def create_user_route(self):
         self.user_service.create_user("John Doe")
         return Response(
             status_code=200,
