@@ -1,5 +1,6 @@
 from daedalus.api.factory import ApiFactory
 from daedalus.bootstrap.bootstrap_manager import BootstrapManager
+from daedalus.logger.logger import Logger
 
 
 class ModuleNode:
@@ -25,8 +26,24 @@ class ModuleNode:
         self._get_imports()
         self._get_controllers()
 
+        self._register_routes()
+
+    def _register_routes(self):
+        """
+        Register routes for the controllers in the module.
+        """
         for controller in self._controllers:
-            print(controller.routes)
+            # Initialize the routes list
+            controller.routes = []
+
+            # Get all the methods of the controller and check if they have the _route attribute
+            for attr_name in dir(controller):
+                attr = getattr(controller, attr_name)
+                if hasattr(attr, '_route'):
+                    route_info = attr._route
+                    controller.routes.append(route_info)
+
+            # Register the routes with the API
             for route in controller.routes:
                 # Create a closure to preserve the controller instance
                 def create_handler(controller_instance, route_handler):
@@ -89,7 +106,7 @@ class ModuleNode:
             injectable: The object to inject dependencies into
         """
 
-        if is_controller:
+        if hasattr(injectable, 'is_controller'):
             setattr(injectable, 'api', self.api)
 
         if hasattr(injectable, 'inject'):
