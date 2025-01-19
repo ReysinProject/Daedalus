@@ -9,7 +9,7 @@ readme = "README.md"
 requires-python = ">=3.13"
 
 [tool.poetry.dependencies]
-janus = {path = "../", develop = true}
+daedalus = {path = "../", develop = true}
 
 
 [build-system]

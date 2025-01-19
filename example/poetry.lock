@@ -74,6 +74,27 @@ files = [
 ]
 
 [[package]]
+name = "daedalus"
+version = "0.1.0"
+description = "A structured, architecturally elegant Python web framework "
+optional = false
+python-versions = ">=3.13"
+groups = ["main"]
+files = []
+develop = true
+
+[package.dependencies]
+falcon = ">=4.0.2,<5.0.0"
+fastapi = ">=0.115.6,<0.116.0"
+flask = ">=3.1.0,<4.0.0"
+uvicorn = ">=0.34.0,<0.35.0"
+waitress = ">=3.0.2,<4.0.0"
+
+[package.source]
+type = "directory"
+url = ".."
+
+[[package]]
 name = "falcon"
 version = "4.0.2"
 description = "The ultra-reliable, fast ASGI+WSGI framework for building data plane APIs at scale."
@@ -212,27 +233,6 @@ files = [
     {file = "itsdangerous-2.2.0-py3-none-any.whl", hash = "sha256:c6242fc49e35958c8b15141343aa660db5fc54d4f13a1db01a3f5891b98700ef"},
     {file = "itsdangerous-2.2.0.tar.gz", hash = "sha256:e0050c0b7da1eea53ffaf149c0cfbb5c6e2e2b69c4bef22c81fa6eb73e5f6173"},
 ]
-
-[[package]]
-name = "janus"
-version = "0.1.0"
-description = "Janus is a Python meta-framework that lets you write your API once and seamlessly deploy it across multiple web frameworks"
-optional = false
-python-versions = ">=3.13"
-groups = ["main"]
-files = []
-develop = true
-
-[package.dependencies]
-falcon = ">=4.0.2,<5.0.0"
-fastapi = ">=0.115.6,<0.116.0"
-flask = ">=3.1.0,<4.0.0"
-uvicorn = ">=0.34.0,<0.35.0"
-waitress = ">=3.0.2,<4.0.0"
-
-[package.source]
-type = "directory"
-url = ".."
 
 [[package]]
 name = "jinja2"
@@ -555,4 +555,4 @@ watchdog = ["watchdog (>=2.3)"]
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.13"
-content-hash = "45837a5ad21a12b64b400c9108f244ed82f43c7d7310ace372ad37a3f528f787"
+content-hash = "f5d9c8b7212ce09ad165b3ca8811f12c40dadb56fd42dabfaa203ee19dee4ffe"

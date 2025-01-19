@@ -1,5 +1,5 @@
 from daedalus.core.factory import DaedalusFactory
-from example.src.main_module import MainModule
+from example.example.main_module import MainModule
 
 app = DaedalusFactory(
     module=MainModule,

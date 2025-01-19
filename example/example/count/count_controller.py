@@ -1,7 +1,7 @@
 from daedalus.api.decorators.endpoint import endpoint
 from daedalus.api.interface.response import Response
 from daedalus.bootstrap.decorator.controller import Controller
-from example.src.count.count_service import CountService
+from example.example.count.count_service import CountService
 
 
 @Controller()
