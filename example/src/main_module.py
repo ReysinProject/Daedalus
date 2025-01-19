@@ -5,4 +5,4 @@ from daedalus.bootstrap.decorator.module import Module
 class MainModule:
     providers = []
     controllers = []
-    imports = ['UserModule', 'LoggerModule', 'TestModule']
+    imports = ['CountModule']
