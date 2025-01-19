@@ -1,3 +1,8 @@
+> **⚠️ Warning ⚠️**
+> This project is currently in an early development and prototyping phase.
+> The Daedalus library is neither complete nor stable and should not be used in any production environment.
+
+
 # Daedalus Python Library
 
 Daedalus is a powerful and flexible Python library designed to simplify the process of creating APIs. It provides a clean, modular way to integrate services, controllers, and endpoints, making it easy to build scalable and maintainable applications. With support for FastAPI and Falcon frameworks, Daedalus gives you the freedom to choose the right tool for your needs.
