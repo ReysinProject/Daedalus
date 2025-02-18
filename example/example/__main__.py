@@ -1,5 +1,6 @@
 import uvicorn
 from daedalus import initialize_daedalus
+from example.apps.article.controller import Article
 
 def main():
     app = initialize_daedalus()

@@ -58,8 +58,9 @@ class DaedalusBootstrapper:
             return_type = str
 
         # Create resolver function
-        def resolver_func(*args, **kwargs):
-            return method(*args, **kwargs)
+        # TODO: implement signature return type and arguments
+        def resolver_func() -> str:
+            return method()
 
         # Decorate with strawberry.field
         resolver = strawberry.field(
