@@ -1,4 +1,3 @@
-from fastapi import FastAPI
 import uvicorn
 from daedalus import initialize_daedalus
 
