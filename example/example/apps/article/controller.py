@@ -1,22 +1,47 @@
-from daedalus.core.api.controller import Controller
-from daedalus.core.api.controller_implementation import CImpl
-from daedalus.core.api.decorator.search import search
+from daedalus import Controller, CImpl, search, mutate, delete
+from typing import List, Dict, Optional
+from pydantic import BaseModel
 
+class ArticleModel(BaseModel):
+    id: Optional[str] = None
+    title: str
+    content: str
+    author: str
 
 @Controller(
     prefix='/article',
     access_limitation=lambda ctx: True
 )
 class Article(CImpl):
+    def __init__(self):
+        super().__init__()
+        self.articles = []  # In-memory store for this example
 
     @search
-    def search(self):
-        pass
+    def search(self, author: Optional[str] = None) -> List[Dict]:
+        """Search for articles, optionally filtered by author"""
+        if author:
+            return [article for article in self.articles if article['author'] == author]
+        return self.articles
 
-    # @daedalus.mutate
-    # def mutate(self, title: str, content: str):
-    #     pass
-    #
-    # @daedalus.delete
-    # def delete(self, id: str):
-    #     pass
+    @mutate
+    def mutate(self, title: str, content: str, author: str) -> Dict:
+        """Create or update an article"""
+        article = {
+            'id': str(len(self.articles) + 1),
+            'title': title,
+            'content': content,
+            'author': author
+        }
+        self.articles.append(article)
+        return article
+
+    @delete
+    def delete(self, id: str) -> Dict:
+        """Delete an article by id"""
+        for i, article in enumerate(self.articles):
+            if article['id'] == id:
+                deleted = self.articles.pop(i)
+                return {"success": True, "deleted": deleted}
+        return {"success": False, "message": "Article not found"}
+

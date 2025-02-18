@@ -5,16 +5,15 @@ import inspect
 T = TypeVar('T')
 
 
-def search(func: Callable[..., T]) -> Callable[..., T]:
+def delete(func: Callable[..., T]) -> Callable[..., T]:
     @wraps(func)
     def wrapper(self, *args, **kwargs):
-        # Execute the original function
         result = func(self, *args, **kwargs)
         return result
 
     # Store metadata for the bootstrapper
     setattr(wrapper, '__decorated__', True)
-    setattr(wrapper, 'is_search', True)
+    setattr(wrapper, 'is_delete', True)
     setattr(wrapper, 'original_func', func)
 
     # Store the signature for GraphQL schema generation

@@ -1,11 +1,8 @@
-from collections.abc import Callable
-from functools import wraps
-
+from typing import Callable
 from daedalus.core.api.context.controller_context import ControllerContext
 
-
 class Controller:
-    def __init__(self, prefix: str = None, access_limitation: Callable[[ControllerContext], bool] = lambda: True):
+    def __init__(self, prefix: str = None, access_limitation: Callable[[ControllerContext], bool] = lambda _: True):
         self.prefix = prefix
         self.access_limitation = access_limitation
 
@@ -21,7 +18,6 @@ class Controller:
         original_init = cls.__init__
 
         # Define a new __init__ method
-        @wraps(original_init)
         def new_init(self, *args, **kwargs):
             original_init(self, *args, **kwargs)
             setattr(self, 'container', "test")
