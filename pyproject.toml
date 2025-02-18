@@ -6,13 +6,11 @@ authors = [
     {name = "ER28",email = "l.guerra-rago@pm.me"}
 ]
 readme = "README.md"
-requires-python = ">=3.13"
+requires-python = ">=3.10,<4.0"
 dependencies = [
-    "falcon (>=4.0.2,<5.0.0)",
-    "flask (>=3.1.0,<4.0.0)",
-    "waitress (>=3.0.2,<4.0.0)",
     "uvicorn (>=0.34.0,<0.35.0)",
-    "fastapi (>=0.115.6,<0.116.0)"
+    "fastapi (>=0.115.6,<0.116.0)",
+    "sqlalchemy (>=2.0.38,<3.0.0)"
 ]
 
 

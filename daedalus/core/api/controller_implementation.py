@@ -1,0 +1,2 @@
+class CImpl:
+    app: str

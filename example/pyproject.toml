@@ -6,10 +6,11 @@ authors = [
     {name = "ER28",email = "l.guerra-rago@pm.me"}
 ]
 readme = "README.md"
-requires-python = ">=3.13"
+requires-python = ">=3.10,<4.0"
 
 [tool.poetry.dependencies]
 daedalus = {path = "../", develop = true}
+strawberry-graphql = "^0.260.2"
 
 
 [build-system]
