@@ -1,3 +1,4 @@
+import strawberry
 from pydantic import BaseModel
 
 

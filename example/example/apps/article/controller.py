@@ -1,5 +1,5 @@
 from daedalus import Controller, CImpl, search, mutate, delete, get
-from typing import List, Dict, Optional
+from typing import List, Dict, Optional, Annotated
 from pydantic import BaseModel
 
 
@@ -20,7 +20,8 @@ class Article(CImpl):
 
     @get
     def example_query(self, name: str) -> str:
-        return "Hello " + name
+        print(name)
+        return "Hello " + name + "!"
 
     # @search
     # def search(self, author: Optional[str] = None) -> List[Dict]:

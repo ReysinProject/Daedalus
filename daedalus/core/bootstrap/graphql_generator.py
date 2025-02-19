@@ -1,4 +1,7 @@
 import inspect
+from inspect import Signature
+from typing import Any, get_type_hints, Callable
+
 import strawberry
 from fastapi import FastAPI
 from strawberry.fastapi import GraphQLRouter
@@ -10,20 +13,38 @@ class GraphQLGenerator:
         self.graphql_queries = {}
         self.graphql_mutations = {}
 
-    def _create_resolver(self, method):
+    def _create_resolver(self, method: Callable) -> strawberry.field:
         """Create a strawberry resolver from a controller method."""
         method_name = method.__name__
-        signature = getattr(method, 'signature')
+        signature = inspect.signature(method)
         return_type = signature.return_annotation
 
         if return_type is inspect._empty:
             return_type = str
 
-        def resolver_func() -> str:
-            return method()
+        params = signature.parameters
+        param_types = {name: param.annotation for name, param in params.items() if
+                       param.annotation is not inspect._empty}
+
+        # Dynamically create the resolver function with typed parameters
+        def resolver_func(*args: Any, **kwargs: Any) -> return_type:
+            bound_args = signature.bind(*args, **kwargs)
+            bound_args.apply_defaults()
+            return method(*bound_args.args, **bound_args.kwargs)
+
+        # Update the resolver function's signature to match the method's signature
+        resolver_func.__signature__ = signature
+        resolver_func.__annotations__ = get_type_hints(method)
+
+        # Create a wrapper function with strict typing
+        def wrapper(*args: Any, **kwargs: Any) -> return_type:
+            return resolver_func(*args, **kwargs)
+
+        wrapper.__signature__ = signature
+        wrapper.__annotations__ = get_type_hints(method)
 
         resolver = strawberry.field(
-            resolver=resolver_func,
+            resolver=wrapper,
             description=method.__doc__ or f"Resolver for {method_name}"
         )
 
