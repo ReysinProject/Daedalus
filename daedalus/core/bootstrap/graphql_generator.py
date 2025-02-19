@@ -26,25 +26,16 @@ class GraphQLGenerator:
         param_types = {name: param.annotation for name, param in params.items() if
                        param.annotation is not inspect._empty}
 
-        # Dynamically create the resolver function with typed parameters
         def resolver_func(*args: Any, **kwargs: Any) -> return_type:
             bound_args = signature.bind(*args, **kwargs)
             bound_args.apply_defaults()
             return method(*bound_args.args, **bound_args.kwargs)
 
-        # Update the resolver function's signature to match the method's signature
         resolver_func.__signature__ = signature
         resolver_func.__annotations__ = get_type_hints(method)
 
-        # Create a wrapper function with strict typing
-        def wrapper(*args: Any, **kwargs: Any) -> return_type:
-            return resolver_func(*args, **kwargs)
-
-        wrapper.__signature__ = signature
-        wrapper.__annotations__ = get_type_hints(method)
-
         resolver = strawberry.field(
-            resolver=wrapper,
+            resolver=resolver_func,
             description=method.__doc__ or f"Resolver for {method_name}"
         )
 
