@@ -5,7 +5,7 @@ import inspect
 T = TypeVar('T')
 
 
-def post(func: Callable[..., T]) -> Callable[..., T]:
+def delete(func: Callable[..., T]) -> Callable[..., T]:
     @wraps(func)
     def wrapper(self, *args, **kwargs):
         result = func(self, *args, **kwargs)

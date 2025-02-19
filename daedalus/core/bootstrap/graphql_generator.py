@@ -7,7 +7,7 @@ from fastapi import FastAPI
 from strawberry.fastapi import GraphQLRouter
 
 class GraphQLGenerator:
-    def __init__(self, app, controllers):
+    def __init__(self, app: FastAPI, controllers):
         self.app = app
         self.controllers = controllers
         self.graphql_queries = {}
@@ -16,7 +16,7 @@ class GraphQLGenerator:
     def _create_resolver(self, method: Callable) -> strawberry.field:
         """Create a strawberry resolver from a controller method."""
         method_name = method.__name__
-        signature = inspect.signature(method)
+        signature: Signature = inspect.signature(method)
         return_type = signature.return_annotation
 
         if return_type is inspect._empty:
@@ -44,22 +44,14 @@ class GraphQLGenerator:
     def generate(self):
         """Generate GraphQL schema using Strawberry."""
         for controller in self.controllers:
-            prefix = getattr(controller, 'prefix', '')
-            prefix_capitalized = ''.join(word.capitalize() for word in prefix.strip('/').split('_'))
-
             for name, method in inspect.getmembers(controller, inspect.ismethod):
                 if hasattr(method, '__decorated__'):
                     if hasattr(method, 'is_query'):
-                        query_name = f"{prefix_capitalized}"
+                        query_name = f"{name}"
                         self.graphql_queries[query_name] = self._create_resolver(method)
                         print(f"Registered GraphQL query: {query_name}")
-                    elif hasattr(method, 'is_search'):
-                        query_name = f"search{prefix_capitalized}"
-                        self.graphql_queries[query_name] = self._create_resolver(method)
-                        print(f"Registered GraphQL query: {query_name}")
-                    elif hasattr(method, 'is_mutate') or hasattr(method, 'is_delete'):
-                        operation = 'mutate' if hasattr(method, 'is_mutate') else 'delete'
-                        mutation_name = f"{operation}{prefix_capitalized}"
+                    elif hasattr(method, 'is_mutate'):
+                        mutation_name = f"{name}"
                         self.graphql_mutations[mutation_name] = self._create_resolver(method)
                         print(f"Registered GraphQL mutation: {mutation_name}")
 

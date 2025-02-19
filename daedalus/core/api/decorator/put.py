@@ -5,7 +5,7 @@ import inspect
 T = TypeVar('T')
 
 
-def post(func: Callable[..., T]) -> Callable[..., T]:
+def put(func: Callable[..., T]) -> Callable[..., T]:
     @wraps(func)
     def wrapper(self, *args, **kwargs):
         result = func(self, *args, **kwargs)
@@ -13,6 +13,6 @@ def post(func: Callable[..., T]) -> Callable[..., T]:
 
     setattr(wrapper, '__decorated__', True)
     setattr(wrapper, 'is_mutate', True)
-    setattr(wrapper, 'is_delete', True)
+    setattr(wrapper, 'is_put', True)
 
     return wrapper

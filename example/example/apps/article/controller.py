@@ -1,6 +1,10 @@
-from daedalus import Controller, CImpl, search, mutate, delete, get
+from daedalus import Controller, CImpl, get, post
 from typing import List, Dict, Optional, Annotated
 from pydantic import BaseModel
+
+from daedalus.core.api.decorator.patch import patch
+from daedalus.core.api.decorator.put import put
+from daedalus.crud.decorator.delete import delete
 
 
 class ArticleModel(BaseModel):
@@ -19,9 +23,27 @@ class Article(CImpl):
         self.articles = []  # In-memory store for this example
 
     @get
-    def example_query(self, name: str) -> str:
-        print(name)
-        return "Hello " + name + "!"
+    def get_artciles(self) -> str:
+        return "Hello World"
+
+
+    @post
+    def create_article(self) -> str:
+        return "Hello World"
+
+    @delete
+    def delete_article(self) -> str:
+        return "Hello World"
+
+    @patch
+    def update_article(self) -> str:
+        return "Hello World"
+
+    @put
+    def put_article(self) -> str:
+        return "Hello World"
+
+
 
     # @search
     # def search(self, author: Optional[str] = None) -> List[Dict]:
