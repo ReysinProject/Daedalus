@@ -1,6 +1,5 @@
 import inspect
 import sys
-from typing import List, Dict, Any, Optional
 import strawberry
 from fastapi import APIRouter, FastAPI
 from strawberry.fastapi import GraphQLRouter
@@ -26,23 +25,36 @@ class DaedalusBootstrapper:
     def register_rest_endpoints(self):
         """Register REST endpoints with FastAPI."""
         for controller in self.controllers:
-            prefix = getattr(controller, 'prefix', '')
+            controller_router = APIRouter(
+                prefix=getattr(controller, 'prefix', ''),
+                tags=[controller.__class__.__name__]
+            )
+            # prefix = getattr(controller, 'prefix', '')
 
             for name, method in inspect.getmembers(controller, inspect.ismethod):
                 if hasattr(method, '__decorated__'):
                     # Register endpoints based on decorator type
-                    if hasattr(method, 'is_search'):
-                        endpoint_path = f"{prefix}/search"
-                        self.router.get(endpoint_path)(method)
+                    if hasattr(method, 'is_get'):
+                        # endpoint_path = f"{prefix}"
+                        endpoint_path = f""
+                        controller_router.get(endpoint_path)(method)
+                        print(f"Registered REST GET endpoint: {endpoint_path}")
+                    elif hasattr(method, 'is_search'):
+                        # endpoint_path = f"{prefix}/search"
+                        endpoint_path = f"/search"
+                        controller_router.get(endpoint_path)(method)
                         print(f"Registered REST GET endpoint: {endpoint_path}")
                     elif hasattr(method, 'is_mutate'):
-                        endpoint_path = f"{prefix}/mutate"
-                        self.router.post(endpoint_path)(method)
+                        # endpoint_path = f"{prefix}/mutate"
+                        endpoint_path = f"/mutate"
+                        controller_router.post(endpoint_path)(method)
                         print(f"Registered REST POST endpoint: {endpoint_path}")
                     elif hasattr(method, 'is_delete'):
-                        endpoint_path = f"{prefix}/delete"
-                        self.router.delete(endpoint_path)(method)
+                        # endpoint_path = f"{prefix}/delete"
+                        endpoint_path = f"/delete"
+                        controller_router.delete(endpoint_path)(method)
                         print(f"Registered REST DELETE endpoint: {endpoint_path}")
+            self.app.include_router(controller_router)
 
         # Add router to the FastAPI app
         self.app.include_router(self.router)
@@ -78,7 +90,11 @@ class DaedalusBootstrapper:
 
             for name, method in inspect.getmembers(controller, inspect.ismethod):
                 if hasattr(method, '__decorated__'):
-                    if hasattr(method, 'is_search'):
+                    if hasattr(method, 'is_query'):
+                        query_name = f"{prefix_capitalized}"
+                        self.graphql_queries[query_name] = self._create_resolver(method)
+                        print(f"Registered GraphQL query: {query_name}")
+                    elif hasattr(method, 'is_search'):
                         query_name = f"search{prefix_capitalized}"
                         self.graphql_queries[query_name] = self._create_resolver(method)
                         print(f"Registered GraphQL query: {query_name}")
@@ -112,7 +128,7 @@ class DaedalusBootstrapper:
 
         # Add GraphQL endpoint to FastAPI
         graphql_app = GraphQLRouter(schema)
-        self.app.include_router(graphql_app, prefix="/graphql")
+        self.app.include_router(graphql_app, prefix="/graphql", tags=["GraphQL"])
         print("Registered GraphQL endpoint at /graphql")
 
     def initialize(self):
