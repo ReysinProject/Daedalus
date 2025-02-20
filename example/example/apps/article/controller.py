@@ -34,13 +34,13 @@ class Article(CImpl):
                 return article
 
 
-    @post
-    def create_article(self, test: ArticleModel) -> str:
-        return "Hello World"
+    # @post
+    # def create_article(self, test: ArticleModel) -> str:
+    #     return "Hello World"
 
     @delete
-    def delete_article(self) -> str:
-        return "Hello World"
+    def delete_article(self) -> ArticleModel:
+        return ArticleModel(id=1, title="Hello World", content="Hello World", author="John Doe")
 
     @patch
     def update_article(self) -> str:
