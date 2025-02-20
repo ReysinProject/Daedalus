@@ -21,30 +21,21 @@ class ArticleModel(BaseScheme):
 class Article(CImpl):
     def __init__(self):
         super().__init__()
-        self.articles = [
-            {
-                'id': '1',
-                'title': 'Hello World',
-                'content': 'This is a test article',
-                'author': 'John Doe'
-            },
-            {
-                'id': '2',
-                'title': 'Hello Universe',
-                'content': 'This is another test article',
-                'author': 'Jane Doe'
-            }
+        self.articles: List[ArticleModel] = [
+            ArticleModel(id=1, title="Hello World", content="Hello World", author="John Doe"),
+            ArticleModel(id=2, title="Hello World", content="Hello World", author="John Doe"),
+            ArticleModel(id=3, title="Hello World", content="Hello World", author="John Doe"),
         ]
 
     @get
     def get_article(self, id: int) -> ArticleModel:
-        article = next((article for article in self.articles if article['id'] == id), None)
-        if article:
-            return article
+        for article in self.articles:
+            if article.id == id:
+                return article
 
 
     @post
-    def create_article(self) -> str:
+    def create_article(self, test: ArticleModel) -> str:
         return "Hello World"
 
     @delete

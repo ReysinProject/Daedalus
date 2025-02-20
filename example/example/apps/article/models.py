@@ -1,3 +1,6 @@
+from sqlalchemy import Column, String, Text
+
+from daedalus.database.base_model import DaedalusTable
 from daedalus.database.decorator.model import model
 
 
