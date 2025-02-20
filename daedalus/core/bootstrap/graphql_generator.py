@@ -23,14 +23,6 @@ class GraphQLGenerator:
         if return_type is inspect._empty:
             return_type = str
 
-        # if return type is a class with basescheme as parent, convert it to graphql type
-        if hasattr(return_type, '__bases__') and BaseScheme in return_type.__bases__:  # type: ignore
-            return_type = return_type.to_graphql()
-
-        params = signature.parameters
-        param_types = {name: param.annotation for name, param in params.items() if
-                       param.annotation is not inspect._empty}
-
         def resolver_func(*args: Any, **kwargs: Any) -> return_type:
             bound_args = signature.bind(*args, **kwargs)
             bound_args.apply_defaults()
