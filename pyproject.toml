@@ -10,7 +10,8 @@ requires-python = ">=3.10,<4.0"
 dependencies = [
     "uvicorn (>=0.34.0,<0.35.0)",
     "fastapi (>=0.115.6,<0.116.0)",
-    "sqlalchemy (>=2.0.38,<3.0.0)"
+    "sqlalchemy (>=2.0.38,<3.0.0)",
+    "strawberry-graphql (>=0.260.2,<0.261.0)"
 ]
 
 

@@ -4,11 +4,12 @@ from pydantic import BaseModel
 
 from daedalus.core.api.decorator.patch import patch
 from daedalus.core.api.decorator.put import put
+from daedalus.core.scheme.base import BaseScheme
 from daedalus.crud.decorator.delete import delete
 
 
-class ArticleModel(BaseModel):
-    id: Optional[str] = None
+class ArticleModel(BaseScheme):
+    id: int
     title: str
     content: str
     author: str
@@ -20,10 +21,26 @@ class ArticleModel(BaseModel):
 class Article(CImpl):
     def __init__(self):
         super().__init__()
+        self.articles = [
+            {
+                'id': '1',
+                'title': 'Hello World',
+                'content': 'This is a test article',
+                'author': 'John Doe'
+            },
+            {
+                'id': '2',
+                'title': 'Hello Universe',
+                'content': 'This is another test article',
+                'author': 'Jane Doe'
+            }
+        ]
 
     @get
-    def get_article(self) -> str:
-        return "Hello World"
+    def get_article(self, id: int) -> ArticleModel:
+        article = next((article for article in self.articles if article['id'] == id), None)
+        if article:
+            return article
 
 
     @post

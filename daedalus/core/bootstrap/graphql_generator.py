@@ -5,6 +5,7 @@ from typing import Any, get_type_hints, Callable
 import strawberry
 from fastapi import FastAPI
 from strawberry.fastapi import GraphQLRouter
+from daedalus.core.scheme.base import BaseScheme
 
 class GraphQLGenerator:
     def __init__(self, app: FastAPI, controllers):
@@ -21,6 +22,10 @@ class GraphQLGenerator:
 
         if return_type is inspect._empty:
             return_type = str
+
+        # if return type is a class with basescheme as parent, convert it to graphql type
+        if hasattr(return_type, '__bases__') and BaseScheme in return_type.__bases__:  # type: ignore
+            return_type = return_type.to_graphql()
 
         params = signature.parameters
         param_types = {name: param.annotation for name, param in params.items() if

@@ -7,7 +7,7 @@
       <excludeFolder url="file://$MODULE_DIR$/example.venv" />
       <excludeFolder url="file://$MODULE_DIR$/example/.venv" />
     </content>
-    <orderEntry type="jdk" jdkName="Python 3.12 (Daedalus) (3)" jdkType="Python SDK" />
+    <orderEntry type="jdk" jdkName="Poetry (Daedalus)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
   <component name="PyDocumentationSettings">
