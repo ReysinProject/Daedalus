@@ -20,10 +20,9 @@ class ArticleModel(BaseModel):
 class Article(CImpl):
     def __init__(self):
         super().__init__()
-        self.articles = []  # In-memory store for this example
 
     @get
-    def get_artciles(self) -> str:
+    def get_article(self) -> str:
         return "Hello World"
 
 
